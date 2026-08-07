@@ -1,0 +1,77 @@
+﻿<Window x:Class="WritingTask.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WritingTask"
+        mc:Ignorable="d"
+        Title="Writing Task" Height="700" Width="800">
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="100"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="100"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="30"/>
+    </Grid.RowDefinitions>
+
+    <Image Grid.Row="0"  Grid.Column="0" Source="/Resources/info.jpg"/>
+
+    <TextBlock Text="Writing Task" Grid.Row="0" Grid.Column="1"  FontSize="50" 
+            VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" TextWrapping="Wrap"/>
+
+    <Frame Name="MainFrame" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+           NavigationUIVisibility="Hidden"/>
+
+    <StatusBar Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+      <StatusBar.ItemsPanel>
+        <ItemsPanelTemplate>
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+          </Grid>
+        </ItemsPanelTemplate>
+      </StatusBar.ItemsPanel>
+
+      <StatusBarItem Grid.Column="0" Margin="10,0">
+        <TextBlock Text="{Binding StatusText}" FontSize="20" FontWeight="Bold"/>
+      </StatusBarItem>
+
+      <StatusBarItem Grid.Column="1" HorizontalContentAlignment="Stretch" Margin="10,0">
+        <Grid Height="24">
+
+          <!-- Line under circles -->
+          <Rectangle Fill="LightGray" Height="8" VerticalAlignment="Center" Margin="10,0"/>
+
+          <!-- Cicles over line -->
+          <ItemsControl ItemsSource="{Binding Steps}">
+            <ItemsControl.ItemsPanel>
+              <ItemsPanelTemplate>
+                <UniformGrid Rows="1"/>
+              </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Grid>
+                  <!-- Simple circle -->
+                  <Ellipse Width="{Binding Radius}" Height="{Binding Radius}" 
+                                             Fill="{Binding CircleColor}" 
+                                             Stroke="White" StrokeThickness="2"/>
+                  <!-- Numb inside -->
+                  <TextBlock Text="{Binding StepNumber}" 
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"
+                                               FontSize="12" FontWeight="Bold" Foreground="White"/>
+                </Grid>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </Grid>
+      </StatusBarItem>
+    </StatusBar>
+  </Grid>
+</Window>
