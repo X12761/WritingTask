@@ -12,10 +12,14 @@ namespace WritingTask
   /// </summary>
   public partial class pgAIDetect : Page, INotifyPropertyChanged
   {
-    public string Emotion { get; set; }
-    public string EmotionImg { get; set; }
-    public int ConfidenceVal { get; set; }
-    public string Confidence { get; set; }
+    private string _emotion;
+    public string Emotion { get => _emotion; set { _emotion = value; OnPropertyChanged(nameof(Emotion)); } }
+    private string _emimg; 
+    public string EmotionImg { get => _emimg; set { _emimg = value; OnPropertyChanged(nameof(EmotionImg)); } }
+    private double _confVal;
+    public double ConfidenceVal { get => _confVal; set { _confVal = value; OnPropertyChanged(nameof(ConfidenceVal)); } }
+    private string _conf;
+    public string Confidence { get => _conf; set { _conf = value; OnPropertyChanged(nameof(Confidence)); } }
 
     public List<int> RatingNumbers { get; } = new List<int>();
 
@@ -34,7 +38,7 @@ namespace WritingTask
       icQuiz.Visibility = Visibility.Visible;
     }
 
-    private void RatingChecked(object sender, System.Windows.RoutedEventArgs e)
+    private void RatingChecked(object sender, RoutedEventArgs e)
     {
       if (sender is RadioButton rb && int.TryParse(rb.Tag?.ToString(), out int rating))
       {
@@ -58,12 +62,12 @@ namespace WritingTask
     protected void OnPropertyChanged([CallerMemberName] string name = null)
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 
-    private void PageLoaded(object sender, System.Windows.RoutedEventArgs e)
+    private void PageLoaded(object sender, RoutedEventArgs e)
     {
-      Emotion = "Undetected"; OnPropertyChanged(nameof(Emotion));
-      EmotionImg = "/Resources/emneutral.png"; OnPropertyChanged(nameof(EmotionImg));
-      ConfidenceVal = 0; OnPropertyChanged(nameof(ConfidenceVal));
-      Confidence = $"Confidence {ConfidenceVal}%"; OnPropertyChanged(nameof(Confidence));
+      Emotion = "Undetected"; 
+      EmotionImg = "/Resources/emneutral.png"; 
+      ConfidenceVal = 0; 
+      Confidence = $"Confidence {ConfidenceVal}%"; 
     }
   }
 }

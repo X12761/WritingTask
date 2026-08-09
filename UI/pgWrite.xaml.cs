@@ -17,6 +17,8 @@ namespace WritingTask
     // Timing 
     private readonly Stopwatch _typewatch = new Stopwatch();
     private DispatcherTimer _uiTimer;
+    private bool _onProgress = false; // Prediction on progress
+    private bool _needQuiz;           // Needs AI prediction scoring
     // Log and not released (Down-state) keys
     private readonly Dictionary<Key, KeyLogEntry> _activeKeys = new Dictionary<Key, KeyLogEntry>();
     //--------------------------------------------------------------------------- HELPER
@@ -43,10 +45,11 @@ namespace WritingTask
       DataContext = this;
       this.stage = stage;
       if (TypeSession.code[stage * 2] == 'P') // AI Score
-        lblTask.Text = "Describe a time when You felt very happy"; else
+        lblTask.Text = "Describe a time when You felt very happy";
+      else
         lblTask.Text = "Describe a time when You felt UNHAPPY";
 
-      if (TypeSession.code[stage*2+1] == 'A') // AI Score
+      if (TypeSession.code[stage * 2 + 1] == 'A') // AI Score
         scoreFrame.Navigate(new pgAIDetect());
     }
 
@@ -56,18 +59,11 @@ namespace WritingTask
       {
         TypeSession.NewSession(); // Init new session
         _activeKeys.Clear(); _typewatch.Restart();
-        _uiTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(33), // UI time update
-                DispatcherPriority.Normal,
-                (s, args) => {
-                  lblElapsed.Text = _typewatch.Elapsed.ToString(@"hh\:mm\:ss");
-                  if (TypeSession.code[stage * 2 + 1] == 'A') // AI detection session
-                    if (TypeSession.KeyLog.Count>10 || (int)_typewatch.Elapsed.TotalSeconds == 5) // Quiz trigger
-                      if (scoreFrame.Content is pgAIDetect detectPage && // Quiz not started
-                        detectPage.lblQuiz.Visibility!=Visibility.Visible) detectPage.aiRate(); 
-                },
-                Dispatcher);
+        _uiTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(33) };
+        _uiTimer.Tick += TimerTick;
         _uiTimer.Start();
-        txtTask.Focus(); }), DispatcherPriority.ContextIdle); /* +D+ */
+        txtTask.Focus();
+      }), DispatcherPriority.ContextIdle); /* +D+ */
     }
 
     private void Page_Unloaded(object sender, RoutedEventArgs e)
@@ -76,6 +72,42 @@ namespace WritingTask
       if (!_typewatch.IsRunning) return;
       _typewatch.Stop();
       _uiTimer?.Stop();
+    }
+
+    private async void TimerTick(object sender, EventArgs e)
+    {
+      lblElapsed.Text = _typewatch.Elapsed.ToString(@"hh\:mm\:ss");
+
+      if (_needQuiz)  // Prediction done, need to score it
+        if (scoreFrame.Content is pgAIDetect detectPage && // Quiz not started
+          detectPage.lblQuiz.Visibility != Visibility.Visible)
+        {
+          _needQuiz = false;
+          detectPage.aiRate();
+        }
+
+      if (_onProgress) return; // Next code for prediction
+      if (TypeSession.code[stage * 2 + 1] == 'A') // AI detection session
+        //if (TypeSession.KeyLog.Count > 10 || (int)_typewatch.Elapsed.TotalSeconds == 5) // Probe trigger +D+
+        if ((int)_typewatch.Elapsed.TotalSeconds == 5) // Probe trigger +D+
+        {
+          _onProgress = true;
+          aiProbe probe = new aiProbe(TypeSession.KeyLog);
+          try
+          {
+            await probe.MakeData();
+            string result = await probe.ExecAsync();
+            OnScriptResult(result, (pgAIDetect)scoreFrame.Content);
+          }
+          catch (Exception ex)
+          {
+            OnScriptError(ex.Message, (pgAIDetect)scoreFrame.Content); 
+          }
+          finally
+          {
+            _onProgress = false;
+          }
+        }
     }
 
     private void editKeyDown(object sender, KeyEventArgs e)
@@ -117,9 +149,51 @@ namespace WritingTask
       _uiTimer?.Stop();
 
       App.StepBar.NextStep();
-      if (stage<1) // 1 - Final stage +D+
-        App.MainFrame.Navigate(new pgPause(stage+1)); else
+      if (stage < 1) // 1 - Final stage +D+
+        App.MainFrame.Navigate(new pgPause(stage + 1));
+      else
         App.MainFrame.Navigate(new pgFinal());
+    }
+
+    private void OnScriptResult(string result, pgAIDetect frame)
+    {
+      _needQuiz = true;
+      switch (result[0])
+      {
+        case 'A':
+          frame.Emotion = "Angry";
+          frame.EmotionImg = "/Resources/emangry.png";
+          break;
+        case 'C':
+          frame.Emotion = "Calm";
+          frame.EmotionImg = "/Resources/emcalm.png";
+          break;
+        case 'H':
+          frame.Emotion = "Happy";
+          frame.EmotionImg = "/Resources/emhappy.png";
+          break;
+        case 'N':
+          frame.Emotion = "Neutral";
+          frame.EmotionImg = "/Resources/emneutral.png";
+          break;
+        case 'S':
+          frame.Emotion = "Sad";
+          frame.EmotionImg = "/Resources/emsad.png";
+          break;
+      }
+
+      result = result.Substring(2);
+      if (double.TryParse(result.Substring(2), out double conf))
+      {
+        frame.ConfidenceVal = conf;
+        frame.Confidence = $"Confidence {conf}%";
+      }
+      frame.Confidence = result;
+    }
+
+    private void OnScriptError(string error, pgAIDetect frame)
+    {
+      frame.Emotion = error;
     }
 
     // Notify

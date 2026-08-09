@@ -72,6 +72,19 @@ public class KeyLogEntry
   public TimeSpan ReleasedAt { get; set; }
   public double ReleasedAtMs { get; set; }
   public double DurationMs { get; set; }
+
+  public KeyLogEntry() { }
+  public KeyLogEntry(KeyLogEntry source)
+  {
+    this.KeyName = source.KeyName;
+    this.PressedAt = source.PressedAt;
+    this.PressedAtMs = source.PressedAtMs;
+    this.ReleasedAt = source.ReleasedAt;
+    this.ReleasedAtMs = source.ReleasedAtMs;
+    this.DurationMs = source.DurationMs;
+  }
+
+  public KeyLogEntry Clone() => new KeyLogEntry(this);
 }
 // -------------------------------------------------------- Quiz list entry
 public class QuizLogEntry
