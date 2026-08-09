@@ -23,7 +23,7 @@
 
     <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical">
       <TextBlock Text="Topic" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold"/>
-      <TextBlock Name="lblTask" Text="Describe a time when You felt very happy" 
+      <TextBlock Name="lblTask" Text="Type" 
                  TextWrapping="Wrap" HorizontalAlignment="Stretch" FontSize="16"/>
     </StackPanel>
 
@@ -61,6 +61,7 @@
     <Button Content="Done" Grid.Row="3" Grid.Column="2" Height="35" Click="DoneClick"/>
 
     <!-- AI meter-->
-    <Frame Name="scoreFrame" Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" NavigationUIVisibility="Hidden"/>
+    <Frame Name="scoreFrame" Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" 
+           JournalOwnership="OwnsJournal" NavigationUIVisibility="Hidden"/>
   </Grid>
 </Page>

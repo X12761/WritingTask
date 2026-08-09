@@ -15,7 +15,7 @@ namespace WritingTask
   {
     private int stage; // Session stage
     // Timing 
-    private readonly Stopwatch _stopwatch = new Stopwatch();
+    private readonly Stopwatch _typewatch = new Stopwatch();
     private DispatcherTimer _uiTimer;
     // Log and not released (Down-state) keys
     private readonly Dictionary<Key, KeyLogEntry> _activeKeys = new Dictionary<Key, KeyLogEntry>();
@@ -42,10 +42,12 @@ namespace WritingTask
       InitializeComponent();
       DataContext = this;
       this.stage = stage;
+      if (TypeSession.code[stage * 2] == 'P') // AI Score
+        lblTask.Text = "Describe a time when You felt very happy"; else
+        lblTask.Text = "Describe a time when You felt UNHAPPY";
+
       if (TypeSession.code[stage*2+1] == 'A') // AI Score
-      {
         scoreFrame.Navigate(new pgAIDetect());
-      }
     }
 
     private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -53,10 +55,16 @@ namespace WritingTask
       Dispatcher.BeginInvoke(new Action(() => // Start after form painted and ready
       {
         TypeSession.NewSession(); // Init new session
-        _activeKeys.Clear(); _stopwatch.Restart();
+        _activeKeys.Clear(); _typewatch.Restart();
         _uiTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(33), // UI time update
                 DispatcherPriority.Normal,
-                (s, args) => { lblElapsed.Text = _stopwatch.Elapsed.ToString(@"hh\:mm\:ss"); },
+                (s, args) => {
+                  lblElapsed.Text = _typewatch.Elapsed.ToString(@"hh\:mm\:ss");
+                  if (TypeSession.code[stage * 2 + 1] == 'A') // AI detection session
+                    if (TypeSession.KeyLog.Count>10 || (int)_typewatch.Elapsed.TotalSeconds == 5) // Quiz trigger
+                      if (scoreFrame.Content is pgAIDetect detectPage && // Quiz not started
+                        detectPage.lblQuiz.Visibility!=Visibility.Visible) detectPage.aiRate(); 
+                },
                 Dispatcher);
         _uiTimer.Start();
         txtTask.Focus(); }), DispatcherPriority.ContextIdle); /* +D+ */
@@ -65,18 +73,18 @@ namespace WritingTask
     private void Page_Unloaded(object sender, RoutedEventArgs e)
     {
       TypeSession.Complete();
-      if (!_stopwatch.IsRunning) return;
-      _stopwatch.Stop();
+      if (!_typewatch.IsRunning) return;
+      _typewatch.Stop();
       _uiTimer?.Stop();
     }
 
     private void editKeyDown(object sender, KeyEventArgs e)
     {
-      if (!_stopwatch.IsRunning) return;
+      if (!_typewatch.IsRunning) return;
       if (e.IsRepeat) return; // Ignore autorepeat +D+
 
       var key = e.Key;
-      var time = _stopwatch.Elapsed;
+      var time = _typewatch.Elapsed;
 
       if (_activeKeys.ContainsKey(key)) return; // Key already down +D+
 
@@ -91,13 +99,13 @@ namespace WritingTask
 
     private void editKeyUp(object sender, KeyEventArgs e)
     {
-      if (!_stopwatch.IsRunning) return;
+      if (!_typewatch.IsRunning) return;
 
       var key = e.Key;
       if (!_activeKeys.TryGetValue(key, out var entry)) return; // Key not been pressed
       _activeKeys.Remove(key);        // Remove from pressed keys
 
-      var time = _stopwatch.Elapsed;  // Fix release
+      var time = _typewatch.Elapsed;  // Fix release
       entry.ReleasedAt = time;
       entry.ReleasedAtMs = time.TotalMilliseconds;
       entry.DurationMs = (time - entry.PressedAt).TotalMilliseconds;
@@ -105,7 +113,7 @@ namespace WritingTask
 
     private void DoneClick(object sender, RoutedEventArgs e)
     {
-      _stopwatch.Stop();
+      _typewatch.Stop();
       _uiTimer?.Stop();
 
       App.StepBar.NextStep();

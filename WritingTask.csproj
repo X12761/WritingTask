@@ -61,10 +61,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\pgAIScore.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UI\pgDebug.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -95,9 +91,6 @@
     </Compile>
     <Compile Include="UI\pgAIDetect.xaml.cs">
       <DependentUpon>pgAIDetect.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\pgAIScore.xaml.cs">
-      <DependentUpon>pgAIScore.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\pgDebug.xaml.cs">
       <DependentUpon>pgDebug.xaml</DependentUpon>

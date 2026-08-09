@@ -23,7 +23,7 @@ public class TypeSession
 
   // Quiz
   private static QuizLogEntry _lastQuiz;
-  private static QuizLogEntry Quiz { get => _lastQuiz; }
+  public static QuizLogEntry Quiz { get => _lastQuiz; }
   private static List<QuizLogEntry> _quiz { get; } = new List<QuizLogEntry>();
   public static List<QuizLogEntry> QuizLog { get => _quiz; }
 
@@ -43,7 +43,7 @@ public class TypeSession
     _lastSession.withAI = withAI;
   }
 
-  public static void NewQuiz(string name)
+  public static void NewQuiz(string name = "None")
   {
     _quiz.Add(new QuizLogEntry(name));
     _lastQuiz = _quiz[_quiz.Count - 1];
@@ -78,9 +78,10 @@ public class QuizLogEntry
 {
   private int _rate;
 
-  public QuizLogEntry(string name = "default")
-  { QuizName = name;
-    Asked = DateTime.Now;
+  public QuizLogEntry(string name)
+  {
+    QuizName = name;
+    Start = DateTime.Now;
     aiPredict = -1;
     aiConfidence = 0;
   }
@@ -88,7 +89,7 @@ public class QuizLogEntry
   public string QuizName { get; set; }
   public int aiPredict { get; set; }
   public double aiConfidence { get; set; }
-  public DateTime Asked { get; set; }
+  public DateTime Start { get; set; }
   public DateTime Complete { get; set; }
   public int Rate { get => _rate; set { _rate = value; Complete = DateTime.Now; } }
 }

@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:WritingTask"
       mc:Ignorable="d" 
       d:DesignHeight="300" d:DesignWidth="200"
-      Title="pgAIScore" Loaded="FrameLoaded">
+      Title="pgAIScore" Loaded="PageLoaded">
 
   <DockPanel>
     <TextBlock Name="aiMeter" Text="AI monitor" DockPanel.Dock="Top"
@@ -22,9 +22,8 @@
           <RowDefinition Height="30"/>
           <RowDefinition Height="20"/>
           <RowDefinition Height="20"/>
-          <RowDefinition Height="20"/>
-          <RowDefinition Height="20"/>
-          <RowDefinition Height="20"/>
+          <RowDefinition Height="60"/>
+          <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
         <TextBlock Text="Detected emotion" Grid.Row="0" FontSize="20" 
                HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -36,7 +35,30 @@
         <TextBlock Text="{Binding Confidence}" Grid.Row="3" FontSize="20"  FontWeight="Bold"
                HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-        <ProgressBar Grid.Row="5" FontSize="30" Value="{Binding ConfidenceVal}" HorizontalAlignment="Stretch"/>
+        <ProgressBar Grid.Row="4" FontSize="30" Value="{Binding ConfidenceVal}" HorizontalAlignment="Stretch"/>
+        
+        <!-- Rate -->
+        <TextBlock Name="lblQuiz" Grid.Row="5" Text="How comfortable do You feel being monitored by AI ?" 
+               FontSize="14" FontWeight="Bold" TextWrapping="Wrap" Visibility="Collapsed"/>
+
+        <ItemsControl Name="icQuiz" Grid.Row="6" ItemsSource="{Binding RatingNumbers}" Margin="10" 
+                      Visibility="Collapsed">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+              <UniformGrid Rows="1"/>
+            </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <StackPanel HorizontalAlignment="Center">
+                <RadioButton GroupName="RatingGroup" Tag="{Binding}" Checked="RatingChecked" 
+                         HorizontalAlignment="Center"/>
+                <TextBlock Text="{Binding}" HorizontalAlignment="Center" Margin="0,0,0,5"
+                       FontSize="16" FontWeight="Bold"/>
+              </StackPanel>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
       </Grid>
     </Border>
   </DockPanel>

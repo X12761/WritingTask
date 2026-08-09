@@ -24,7 +24,7 @@ namespace WritingTask
 
     private void PageLoaded(object sender, System.Windows.RoutedEventArgs e)
     {
-      using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(File.ReadAllText($"infoFinal.rtf"))))
+      using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(File.ReadAllText($"data/infoFinal.rtf"))))
       {
         var textRange = new TextRange(lblInfo.Document.ContentStart, lblInfo.Document.ContentEnd);
         textRange.Load(stream, DataFormats.Rtf);

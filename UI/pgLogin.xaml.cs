@@ -29,9 +29,9 @@ namespace WritingTask
 
     private void PageLoaded(object sender, RoutedEventArgs e)
     {
-      if (File.Exists("code.txt"))
+      if (File.Exists("data/code.txt"))
       {
-        TypeSession.code = File.ReadAllText("code.txt");
+        TypeSession.code = File.ReadAllText("data/code.txt");
         txtCode.IsEnabled = false;
         btnSet.Visibility = Visibility.Collapsed;
       }

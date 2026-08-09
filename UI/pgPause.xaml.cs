@@ -30,7 +30,7 @@ namespace WritingTask
 
       if (stage==0) btnContinue.IsEnabled = true;
 
-      using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(File.ReadAllText($"info{TypeSession.code.Substring(stage*2,2)}.rtf"))))
+      using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(File.ReadAllText($"data/info{TypeSession.code.Substring(stage*2,2)}.rtf"))))
       {
         var textRange = new TextRange(lblInfo.Document.ContentStart, lblInfo.Document.ContentEnd);
         textRange.Load(stream, DataFormats.Rtf);
