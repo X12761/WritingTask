@@ -13,7 +13,9 @@ namespace WritingTask
   /// </summary>
   public partial class pgWrite : Page//, INotifyPropertyChanged
   {
-    private int stage; // Session stage
+    private int stage; // Session stage (how mach times write been started)
+    private Char aiPred;  // Last AI result (4Quiz)
+    private double aiConf;
     // Timing 
     private readonly Stopwatch _typewatch = new Stopwatch();
     private DispatcherTimer _uiTimer;
@@ -57,7 +59,7 @@ namespace WritingTask
     {
       Dispatcher.BeginInvoke(new Action(() => // Start after form painted and ready
       {
-        TypeSession.NewSession(); // Init new session
+        TypeSession.NewSession(TypeSession.code[stage * 2 + 1] == 'A'); // Init new session
         _activeKeys.Clear(); _typewatch.Restart();
         _uiTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(33) };
         _uiTimer.Tick += TimerTick;
@@ -83,7 +85,7 @@ namespace WritingTask
           detectPage.lblQuiz.Visibility != Visibility.Visible)
         {
           _needQuiz = false;
-          detectPage.aiRate();
+          detectPage.aiRate(aiPred,aiConf);
         }
 
       if (_onProgress) return; // Next code for prediction
@@ -182,11 +184,13 @@ namespace WritingTask
           break;
       }
 
+      aiPred = result[0]; // Fix pred resut 4Quiz
       result = result.Substring(2);
       if (double.TryParse(result.Substring(2), out double conf))
       {
         frame.ConfidenceVal = conf;
         frame.Confidence = $"Confidence {conf}%";
+        aiConf = conf; // Fix pred resut 4Quiz
       }
       frame.Confidence = result;
     }

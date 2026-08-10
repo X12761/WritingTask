@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using System;
 
 namespace WritingTask
 {
@@ -30,9 +31,11 @@ namespace WritingTask
       for (int i = 1; i <= 7; i++) RatingNumbers.Add(i);
     }
 
-    public void aiRate()
+    public void aiRate(Char predisction, double confidence)
     {
       TypeSession.NewQuiz("AIScore");
+      TypeSession.Quiz.aiPredict = predisction;
+      TypeSession.Quiz.aiConfidence = confidence;
       lblQuiz.Text = "How comfortable do You feel being monitored by AI ?";
       lblQuiz.Visibility = Visibility.Visible;
       icQuiz.Visibility = Visibility.Visible;

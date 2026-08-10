@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -15,18 +17,6 @@ namespace WritingTask
       DataContext = TypeSession.Instance;
     }
 
-    private void NextClick(object sender, RoutedEventArgs e)
-    {
-      App.StepBar.NextStep();
-      App.MainFrame.Navigate(new pgPause());
-    }
-
-    private void SetClick(object sender, RoutedEventArgs e)
-    {
-      txtCode.IsEnabled = false;
-      btnSet.IsEnabled = false;
-    }
-
     private void PageLoaded(object sender, RoutedEventArgs e)
     {
       if (File.Exists("data/code.txt"))
@@ -35,6 +25,24 @@ namespace WritingTask
         txtCode.IsEnabled = false;
         btnSet.Visibility = Visibility.Collapsed;
       }
+    }
+
+    private void NextClick(object sender, RoutedEventArgs e)
+    {
+      using (var writer = new StreamWriter($"out\\login{TypeSession.Id}", false, Encoding.UTF8)) // Login data
+      {
+        writer.WriteLine("Age,Gender,Native,English,Keystroke,Start");
+        writer.WriteLine($"{TypeSession.age}, {TypeSession.gender}, {TypeSession.lang}, {TypeSession.english}, {TypeSession.prof}, {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}");
+      }
+
+      App.StepBar.NextStep();
+      App.MainFrame.Navigate(new pgPause());
+    }
+
+    private void SetClick(object sender, RoutedEventArgs e)
+    {
+      txtCode.IsEnabled = false;
+      btnSet.IsEnabled = false;
     }
   }
 }

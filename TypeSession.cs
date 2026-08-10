@@ -8,6 +8,7 @@ public class TypeSession
   public static TypeSession Instance => _instance.Value;
 
   // Demograph
+  public static int Id { get; set; }  // Session uniq id
   public static int age { get; set; } = 17;
   public static string gender { get; set; }
   public static string lang { get; set; } = "e.g. Korean, English, Mayan";
@@ -27,20 +28,26 @@ public class TypeSession
   private static List<QuizLogEntry> _quiz { get; } = new List<QuizLogEntry>();
   public static List<QuizLogEntry> QuizLog { get => _quiz; }
 
-  private TypeSession() { } // 4 Singleton
+  private TypeSession() // 4 Singleton
+  {
+    int tmark = (int)(DateTimeOffset.UtcNow.ToUnixTimeSeconds() / 60);
+    int guidHash = Math.Abs(Guid.NewGuid().GetHashCode());
+    Id = tmark ^ guidHash;
+  } 
 
   // Starts new keystroke logging session
-  public static void NewSession()
+  public static void NewSession(bool withAI)
   {
     _sessions.Add(new SingleSession());
     _lastSession = _sessions[_sessions.Count - 1];
+    _lastSession.Started = DateTime.Now;
+    _lastSession.withAI = withAI;
   }
 
   // Complete keystroke session
-  public static void Complete(bool withAI = false)
+  public static void Complete()
   {
     _lastSession.Completed = DateTime.Now;
-    _lastSession.withAI = withAI;
   }
 
   public static void NewQuiz(string name = "None")
@@ -56,7 +63,6 @@ public class SingleSession
   public DateTime Completed { get; set; }
   public List<KeyLogEntry> KeyLog { get; } = new List<KeyLogEntry>();
   public bool withAI { get; set; }
-  public int AImark { get; set; }
 
   public SingleSession() 
   {
@@ -95,12 +101,12 @@ public class QuizLogEntry
   {
     QuizName = name;
     Start = DateTime.Now;
-    aiPredict = -1;
+    aiPredict = '-';
     aiConfidence = 0;
   }
 
   public string QuizName { get; set; }
-  public int aiPredict { get; set; }
+  public Char aiPredict { get; set; }
   public double aiConfidence { get; set; }
   public DateTime Start { get; set; }
   public DateTime Complete { get; set; }
