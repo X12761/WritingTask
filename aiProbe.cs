@@ -17,8 +17,14 @@ namespace WritingTask
       foreach (KeyLogEntry p in KeyLog) KeyData.Add(p.Clone());
     }
 
-    public async Task MakeData(string outFile="ai\\indata.csv")
+    public async Task MakeData(string outFile="ai\\indata.csv", string outFile2 = "ai\\login.csv")
     {
+      using (var writer = new StreamWriter(outFile2, false, Encoding.UTF8)) // Login data
+      {
+        writer.WriteLine("Age,Gender,Native,English,Keystroke,Start");
+        writer.WriteLine($"{TypeSession.age}, {TypeSession.gender}, {TypeSession.lang}, {TypeSession.english}, {TypeSession.prof}, {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}");
+      }
+      // Keylog
       using (var writer = new StreamWriter(outFile, false, Encoding.UTF8))
       {
         await writer.WriteLineAsync("Key,Pressed(ms),Released(ms),Duration(ms)");

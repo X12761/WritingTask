@@ -27,19 +27,19 @@ namespace WritingTask
     {
       // Write session log
       foreach (SingleSession s in TypeSession.Sessions)
-        using (var writer = new StreamWriter($"out\\key{TypeSession.Id}_{s.Started.ToString("HH.mm.ss")}", false, Encoding.UTF8))
+        using (var writer = new StreamWriter($"out\\key{TypeSession.Id}_{s.Started.ToString("HH.mm.ss")}.csv", false, Encoding.UTF8))
         {
-          writer.WriteLine($"Started: {s.Started} ,Copmpleted: {s.Completed}, AI score: {s.withAI}");
-          writer.WriteLine("Key,Pressed(ms),Released(ms),Duration(ms)");
+          writer.WriteLine($"Started: {s.Started}; Completed: {s.Completed}; AI score: {s.withAI}");
+          writer.WriteLine("Key;Pressed(ms);Released(ms);Duration(ms)");
           foreach (KeyLogEntry p in s.KeyLog)
-            writer.WriteLine($"{p.KeyName},{p.PressedAtMs:F1},{p.ReleasedAtMs:F1},{p.DurationMs:F1}");
+            writer.WriteLine($"{p.KeyName};{p.PressedAtMs:F1};{p.ReleasedAtMs:F1};{p.DurationMs:F1}");
         }
       // Write sesssion quiz data
-      using (var writer = new StreamWriter($"out\\quiz{TypeSession.Id}", false, Encoding.UTF8))
+      using (var writer = new StreamWriter($"out\\quiz{TypeSession.Id}.csv", false, Encoding.UTF8))
       {
-        writer.WriteLine("Name, Start, Complete, Score, AI prediction, AI Confidence");
+        writer.WriteLine("Name;Start;Complete;Score;AI prediction;AI Confidence");
         foreach (QuizLogEntry q in TypeSession.QuizLog)
-          writer.WriteLine($"{q.QuizName}, {q.Start} ,{q.Complete}, {q.Rate}, {q.aiPredict}, {q.aiConfidence}");
+          writer.WriteLine($"{q.QuizName};{q.Start};{q.Complete};{q.Rate};{q.aiPredict};{q.aiConfidence}");
       }
 
       // Final RTF

@@ -29,10 +29,10 @@ namespace WritingTask
 
     private void NextClick(object sender, RoutedEventArgs e)
     {
-      using (var writer = new StreamWriter($"out\\login{TypeSession.Id}", false, Encoding.UTF8)) // Login data
+      using (var writer = new StreamWriter($"out\\login{TypeSession.Id}.csv", false, Encoding.UTF8)) // Login data
       {
-        writer.WriteLine("Age,Gender,Native,English,Keystroke,Start");
-        writer.WriteLine($"{TypeSession.age}, {TypeSession.gender}, {TypeSession.lang}, {TypeSession.english}, {TypeSession.prof}, {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}");
+        writer.WriteLine("Age;Gender;Native;English;Keystroke;Start");
+        writer.WriteLine($"{TypeSession.age};{TypeSession.gender};{TypeSession.lang};{TypeSession.english};{TypeSession.prof};{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}");
       }
 
       App.StepBar.NextStep();
