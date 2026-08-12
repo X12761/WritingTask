@@ -6,7 +6,11 @@ public class TypeSession
 {
   private static readonly Lazy<TypeSession> _instance = new Lazy<TypeSession>(() => new TypeSession());
   public static TypeSession Instance => _instance.Value;
-
+  // Common timeout
+  public static int PauseTime { get; set; } = 5;  // Pause page time before autoswitch to writing (minutes)
+  public static int PauseNext { get; set; } = 2;  // Next button enable time (minutes)
+  public static int KeyCount { get; set; } = 100; // Key pressed for AI detection
+  public static int KeyTime { get; set; } = 60;   // Minimal time for AI detection (seconds)
   // Demograph
   public static int Id { get; set; }  // Session uniq id
   public static int age { get; set; } = 17;

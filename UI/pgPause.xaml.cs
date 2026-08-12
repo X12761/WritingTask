@@ -24,7 +24,7 @@ namespace WritingTask
       this.stage = stage;
 
       _waitTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1)  };
-      _remain = TimeSpan.FromMinutes(5);
+      _remain = TimeSpan.FromMinutes(TypeSession.PauseTime);
       _waitTimer.Tick += TimerTick;
       _waitTimer.Start();
 
@@ -57,7 +57,7 @@ namespace WritingTask
 
     private void TimerTick(object sender, EventArgs e)
     {
-      if (!btnContinue.IsEnabled && _remain < TimeSpan.FromMinutes(3)) // 2 minutes elapsed
+      if (!btnContinue.IsEnabled && _remain < TimeSpan.FromMinutes(TypeSession.PauseNext)) // Enable start
         btnContinue.IsEnabled = true;
 
       if (_remain <= TimeSpan.Zero) // 5 minutes elapsed - go next

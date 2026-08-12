@@ -90,8 +90,8 @@ namespace WritingTask
 
       if (_onProgress) return; // Next code for prediction
       if (TypeSession.code[stage * 2 + 1] == 'A') // AI detection session
-        //if (TypeSession.KeyLog.Count > 10 || (int)_typewatch.Elapsed.TotalSeconds == 5) // Probe trigger +D+
-        if ((int)_typewatch.Elapsed.TotalSeconds == 5) // Probe trigger +D+
+        //if (TypeSession.KeyLog.Count > TypeSession.KeyCount || (int)_typewatch.Elapsed.TotalSeconds == 5) // Probe trigger +D+
+        if ((int)_typewatch.Elapsed.TotalSeconds == TypeSession.KeyTime) // Probe trigger +D+
         {
           _onProgress = true;
           aiProbe probe = new aiProbe(TypeSession.KeyLog);
@@ -122,7 +122,7 @@ namespace WritingTask
 
       if (_activeKeys.ContainsKey(key)) return; // Key already down +D+
 
-      _activeKeys[key] = new KeyLogEntry  // Fix rey is down
+      _activeKeys[key] = new KeyLogEntry    // Fix key is down
       {
         KeyName = GetKeyName(key, Keyboard.Modifiers),
         PressedAt = time,
