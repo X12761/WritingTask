@@ -27,10 +27,11 @@ namespace WritingTask
       // Keylog
       using (var writer = new StreamWriter(outFile, false, Encoding.UTF8))
       {
-        await writer.WriteLineAsync("Key,Pressed(ms),Released(ms),Duration(ms)");
+        //await writer.WriteLineAsync("Key,Pressed(ms),Released(ms),Duration(ms)");
+        await writer.WriteLineAsync($"{KeyLogEntry.KeyLogHead}");
         foreach (KeyLogEntry p in KeyData)
         {
-          string line = $"{p.KeyName},{p.PressedAtMs:F1},{p.ReleasedAtMs:F1},{p.DurationMs:F1}";
+          string line = p.KeyLogLine();
           await writer.WriteLineAsync(line);
         }
       }

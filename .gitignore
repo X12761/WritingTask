@@ -3,5 +3,6 @@ obj/
 .vs/
 *.user
 *.suo
+*.csv
 packages/
 TestResults/

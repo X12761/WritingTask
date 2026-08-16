@@ -30,9 +30,9 @@ namespace WritingTask
         using (var writer = new StreamWriter($"out\\key{TypeSession.Id}_{s.Started.ToString("HH.mm.ss")}.csv", false, Encoding.UTF8))
         {
           writer.WriteLine($"Started: {s.Started}; Completed: {s.Completed}; AI score: {s.withAI}");
-          writer.WriteLine("Key;Pressed(ms);Released(ms);Duration(ms)");
+          writer.WriteLine($"{KeyLogEntry.KeyLogHead}");
           foreach (KeyLogEntry p in s.KeyLog)
-            writer.WriteLine($"{p.KeyName};{p.PressedAtMs:F1};{p.ReleasedAtMs:F1};{p.DurationMs:F1}");
+            writer.WriteLine($"{p.KeyLogLine()}");
         }
       // Write sesssion quiz data
       using (var writer = new StreamWriter($"out\\quiz{TypeSession.Id}.csv", false, Encoding.UTF8))

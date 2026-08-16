@@ -95,6 +95,9 @@ public class KeyLogEntry
   }
 
   public KeyLogEntry Clone() => new KeyLogEntry(this);
+
+  public static readonly string KeyLogHead = "Key;Down;Up;Duration";
+  public string KeyLogLine() => $"{KeyName};{PressedAtMs:F1};{ReleasedAtMs:F1};{DurationMs:F1}";
 }
 // -------------------------------------------------------- Quiz list entry
 public class QuizLogEntry
