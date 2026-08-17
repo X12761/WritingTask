@@ -11,7 +11,7 @@
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="80"/>
-      <RowDefinition Height="30"/>
+      <RowDefinition Height="35"/>
       <RowDefinition Height="*"/>
       <RowDefinition Height="40"/>
     </Grid.RowDefinitions>
@@ -28,18 +28,18 @@
     </StackPanel>
 
     <ToolBar Grid.Row="1" Grid.Column="0">
-      <Button Content="B" FontWeight="Bold" 
+      <ToggleButton Content="B" FontWeight="Bold" 
                     Command="EditingCommands.ToggleBold" CommandTarget="{Binding ElementName=txtTask}" 
                     ToolTip="Жирный (Ctrl+B)" Width="30"/>
 
-      <Button Content="I" FontStyle="Italic" 
+      <ToggleButton Content="I" FontStyle="Italic" 
                     Command="EditingCommands.ToggleItalic" CommandTarget="{Binding ElementName=txtTask}" 
                     ToolTip="Курсив (Ctrl+I)" Width="30"/>
 
-      <Button Command="EditingCommands.ToggleUnderline" CommandTarget="{Binding ElementName=txtTask}" 
+      <ToggleButton Command="EditingCommands.ToggleUnderline" CommandTarget="{Binding ElementName=txtTask}" 
                     ToolTip="Подчеркнутый (Ctrl+U)" Width="30">
         <TextBlock Text="U" TextDecorations="Underline" />
-      </Button>
+      </ToggleButton>
       <Separator/>
       <Button Content="Left" Command="EditingCommands.AlignLeft" CommandTarget="{Binding ElementName=txtTask}"/>
       <Button Content="Center" Command="EditingCommands.AlignCenter" CommandTarget="{Binding ElementName=txtTask}"/>
@@ -50,7 +50,15 @@
                  AcceptsTab="True" AcceptsReturn="True" FontFamily="Times New Roman"
                  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
                 PreviewKeyDown="editKeyDown" PreviewKeyUp="editKeyUp" />
-    
+
+    <StatusBar Grid.Column="0" Grid.Row="3">
+      <StatusBarItem Margin="10,0">
+        <TextBlock Text="Logged:" FontSize="16"/>
+      </StatusBarItem>
+      <StatusBarItem Margin="10,0">
+        <TextBlock Text="{Binding KeyCount}" FontSize="16" FontWeight="Bold"/>
+      </StatusBarItem>
+    </StatusBar>
     <!-- Splitter -->
     <GridSplitter Grid.Row="0" Grid.Column="1" Grid.RowSpan="5" ResizeDirection="Columns" Width="3" 
                   HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>

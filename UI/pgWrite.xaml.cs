@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -11,11 +13,13 @@ namespace WritingTask
   /// <summary>
   /// Interaction logic for GoWrite.xaml
   /// </summary>
-  public partial class pgWrite : Page//, INotifyPropertyChanged
+  public partial class pgWrite : Page, INotifyPropertyChanged
   {
     private int stage; // Session stage (how mach times write been started)
     private Char aiPred;  // Last AI result (4Quiz)
     private double aiConf;
+    private int aiQuiz = 0;   // How mush time Quiz started
+    public int KeyCount { get => TypeSession.KeyLog!=null? TypeSession.KeyLog.Count:0; } 
     // Timing 
     private readonly Stopwatch _typewatch = new Stopwatch();
     private DispatcherTimer _uiTimer;
@@ -79,6 +83,7 @@ namespace WritingTask
     private async void TimerTick(object sender, EventArgs e)
     {
       lblElapsed.Text = _typewatch.Elapsed.ToString(@"hh\:mm\:ss");
+      OnPropertyChanged(nameof(KeyCount));
 
       if (_needQuiz)  // Prediction done, need to score it
         if (scoreFrame.Content is pgAIDetect detectPage && // Quiz not started
@@ -90,10 +95,12 @@ namespace WritingTask
 
       if (_onProgress) return; // Next code for prediction
       if (TypeSession.code[stage * 2 + 1] == 'A') // AI detection session
-        //if (TypeSession.KeyLog.Count > TypeSession.KeyCount || (int)_typewatch.Elapsed.TotalSeconds == 5) // Probe trigger +D+
-        if ((int)_typewatch.Elapsed.TotalSeconds == TypeSession.KeyTime) // Probe trigger +D+
+        // if ((int)_typewatch.Elapsed.TotalSeconds == TypeSession.KeyTime) // Probe trigger +D+
+        if (TypeSession.KeyLog.Count >= TypeSession.KeyCount && 
+            (int)_typewatch.Elapsed.TotalSeconds >= TypeSession.KeyTime && aiQuiz==0) // Probe trigger
         {
           _onProgress = true;
+          aiQuiz++; ((pgAIDetect)scoreFrame.Content).lblQuiz.Text = "Detecting..";
           aiProbe probe = new aiProbe(TypeSession.KeyLog);
           try
           {
@@ -200,8 +207,8 @@ namespace WritingTask
       frame.Emotion = error;
     }
 
-    // Notify
-    /*public event PropertyChangedEventHandler PropertyChanged;
+    // Notify 4 RichEdit and panel
+    public event PropertyChangedEventHandler PropertyChanged;
     protected void OnPropertyChanged([CallerMemberName] string name = null)
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name)); /* +D+ */
   }

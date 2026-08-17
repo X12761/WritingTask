@@ -24,7 +24,7 @@ public class TypeSession
   private static List<SingleSession> _sessions = new List<SingleSession>();
   public static List<SingleSession> Sessions { get => _sessions; }
   private static SingleSession _lastSession;
-  public static List<KeyLogEntry> KeyLog { get => _lastSession.KeyLog; }
+  public static List<KeyLogEntry> KeyLog { get => _lastSession!=null?_lastSession.KeyLog:null; }
 
   // Quiz
   private static QuizLogEntry _lastQuiz;
