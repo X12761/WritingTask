@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -50,10 +51,11 @@ namespace WritingTask
       InitializeComponent();
       DataContext = this;
       this.stage = stage;
-      if (TypeSession.code[stage * 2] == 'P') // AI Score
+      lblTask.Text = File.ReadAllText($"data/topic{TypeSession.code[stage * 2]}.txt");
+/*      if (TypeSession.code[stage * 2] == 'P') // AI Score
         lblTask.Text = "Describe a time when You felt very happy";
       else
-        lblTask.Text = "Describe a time when You felt UNHAPPY";
+        lblTask.Text = "Describe a time when You felt UNHAPPY"; */
 
       if (TypeSession.code[stage * 2 + 1] == 'A') // AI Score
         scoreFrame.Navigate(new pgAIDetect());

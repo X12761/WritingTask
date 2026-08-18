@@ -24,6 +24,7 @@
           <RowDefinition Height="20"/>
           <RowDefinition Height="60"/>
           <RowDefinition Height="60"/>
+          <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <TextBlock Text="Detected emotion" Grid.Row="0" FontSize="20" 
                HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -59,6 +60,18 @@
             </DataTemplate>
           </ItemsControl.ItemTemplate>
         </ItemsControl>
+
+        
+        <Grid Grid.Row="7" Name="gridImg" Visibility="Collapsed">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          <Image Source="/Resources/rate_bad.png" Grid.Column="0" HorizontalAlignment="Left"/>
+          <Image Source="/Resources/rate_normal.png"  Grid.Column="1" HorizontalAlignment="Center"/>
+          <Image Source="/Resources/rate_good.png" Grid.Column="3" HorizontalAlignment="Right"/>
+        </Grid>
       </Grid>
     </Border>
   </DockPanel>

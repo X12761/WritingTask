@@ -39,6 +39,7 @@ namespace WritingTask
       lblQuiz.Text = "How comfortable do You feel being monitored by AI ?";
       lblQuiz.Visibility = Visibility.Visible;
       icQuiz.Visibility = Visibility.Visible;
+      gridImg.Visibility = Visibility.Visible;
     }
 
     private void RatingChecked(object sender, RoutedEventArgs e)

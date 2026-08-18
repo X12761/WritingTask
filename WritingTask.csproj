@@ -159,5 +159,10 @@
   <ItemGroup>
     <Resource Include="Resources\info.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\rate_bad.png" />
+    <Resource Include="Resources\rate_good.png" />
+    <Resource Include="Resources\rate_normal.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
