@@ -18,7 +18,9 @@ public class TypeSession
   public static string lang { get; set; } = "e.g. Korean, English, Mayan";
   public static string english { get; set; } = "B2";
   public static int prof { get; set; } = 10;
-  public static string code { get; set; } = "PBNA"; // (P)ositive (B)aseline, (N)euthral (A)I
+  // (P) ositive(B)aseline, (N) euthral(A)I
+  // B/A in code, PN - in infoXX.rtf and topicX.txt - may be expanded
+  public static string code { get; set; } = "PBNA"; 
 
   // Key stroke session
   private static List<SingleSession> _sessions = new List<SingleSession>();

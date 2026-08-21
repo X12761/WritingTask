@@ -22,6 +22,7 @@ namespace WritingTask
       if (File.Exists("data/code.txt"))
       {
         TypeSession.code = File.ReadAllText("data/code.txt");
+        txtCode.Text = TypeSession.code;
         txtCode.IsEnabled = false;
         btnSet.Visibility = Visibility.Collapsed;
       }
