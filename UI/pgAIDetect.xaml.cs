@@ -24,9 +24,17 @@ namespace WritingTask
 
     public List<int> RatingNumbers { get; } = new List<int>();
 
-    public pgAIDetect()
+    public pgAIDetect(bool ai = true)
     {
       InitializeComponent();
+      if (!ai)  // Not AI detection
+      {
+        lblDetect.Text = "";
+        lblEmo.Visibility = Visibility.Collapsed;
+        imgEmo.Visibility = Visibility.Collapsed;
+        lblConf.Visibility = Visibility.Collapsed;
+        pbConf.Visibility = Visibility.Collapsed;
+      }
       DataContext = this;
       for (int i = 1; i <= 7; i++) RatingNumbers.Add(i);
     }
@@ -37,6 +45,17 @@ namespace WritingTask
       TypeSession.Quiz.aiPredict = predisction;
       TypeSession.Quiz.aiConfidence = confidence;
       lblQuiz.Text = "How comfortable do You feel being monitored by AI ?";
+      lblQuiz.Visibility = Visibility.Visible;
+      icQuiz.Visibility = Visibility.Visible;
+      gridImg.Visibility = Visibility.Visible;
+    }
+
+    public void BaseRate()
+    {
+      TypeSession.NewQuiz("ComfortScore");
+      TypeSession.Quiz.aiPredict = '-';
+      TypeSession.Quiz.aiConfidence = -1;
+      lblQuiz.Text = "How comfortable do You feel?";
       lblQuiz.Visibility = Visibility.Visible;
       icQuiz.Visibility = Visibility.Visible;
       gridImg.Visibility = Visibility.Visible;
@@ -57,6 +76,7 @@ namespace WritingTask
         {
           lblQuiz.Visibility = Visibility.Collapsed;
           icQuiz.Visibility = Visibility.Collapsed;
+          gridImg.Visibility = Visibility.Collapsed;
         }
       }
     }

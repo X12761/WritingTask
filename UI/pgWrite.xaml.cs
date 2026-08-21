@@ -20,7 +20,7 @@ namespace WritingTask
     private Char aiPred;  // Last AI result (4Quiz)
     private double aiConf;
     private int aiQuiz = 0;   // How mush time Quiz started
-    public int KeyCount { get => TypeSession.KeyLog!=null? TypeSession.KeyLog.Count:0; } 
+    public int KeyCount { get => TypeSession.KeyLog != null ? TypeSession.KeyLog.Count : 0; }
     // Timing 
     private readonly Stopwatch _typewatch = new Stopwatch();
     private DispatcherTimer _uiTimer;
@@ -52,13 +52,14 @@ namespace WritingTask
       DataContext = this;
       this.stage = stage;
       lblTask.Text = File.ReadAllText($"data/topic{TypeSession.code[stage * 2]}.txt");
-/*      if (TypeSession.code[stage * 2] == 'P') // AI Score
-        lblTask.Text = "Describe a time when You felt very happy";
-      else
-        lblTask.Text = "Describe a time when You felt UNHAPPY"; */
+      /*      if (TypeSession.code[stage * 2] == 'P') // AI Score // Now - from file
+              lblTask.Text = "Describe a time when You felt very happy";
+            else
+              lblTask.Text = "Describe a time when You felt UNHAPPY"; */
 
-      if (TypeSession.code[stage * 2 + 1] == 'A') // AI Score
-        scoreFrame.Navigate(new pgAIDetect());
+      //if (TypeSession.code[stage * 2 + 1] == 'A') // AI Score  +D+
+      // Looks differ for BASE and AI
+      scoreFrame.Navigate(new pgAIDetect(TypeSession.code[stage * 2 + 1] == 'A'));
     }
 
     private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -87,19 +88,21 @@ namespace WritingTask
       lblElapsed.Text = _typewatch.Elapsed.ToString(@"hh\:mm\:ss");
       OnPropertyChanged(nameof(KeyCount));
 
-      if (_needQuiz)  // Prediction done, need to score it
+      if (_needQuiz)  // Need base of comfort
         if (scoreFrame.Content is pgAIDetect detectPage && // Quiz not started
           detectPage.lblQuiz.Visibility != Visibility.Visible)
         {
           _needQuiz = false;
-          detectPage.aiRate(aiPred,aiConf);
+          if (TypeSession.code[stage * 2 + 1] == 'A') // Prediction done, need to score it
+            detectPage.aiRate(aiPred, aiConf);
+          else
+            detectPage.BaseRate();
         }
 
       if (_onProgress) return; // Next code for prediction
-      if (TypeSession.code[stage * 2 + 1] == 'A') // AI detection session
-        // if ((int)_typewatch.Elapsed.TotalSeconds == TypeSession.KeyTime) // Probe trigger +D+
-        if (TypeSession.KeyLog.Count >= TypeSession.KeyCount && 
-            (int)_typewatch.Elapsed.TotalSeconds >= TypeSession.KeyTime && aiQuiz==0) // Probe trigger
+      if (TypeSession.KeyLog.Count >= TypeSession.KeyCount && // Quiz trigger
+          (int)_typewatch.Elapsed.TotalSeconds >= TypeSession.KeyTime && aiQuiz == 0) // Probe trigger
+        if (TypeSession.code[stage * 2 + 1] == 'A') // AI detection session
         {
           _onProgress = true;
           aiQuiz++; ((pgAIDetect)scoreFrame.Content).lblQuiz.Text = "Detecting..";
@@ -112,12 +115,16 @@ namespace WritingTask
           }
           catch (Exception ex)
           {
-            OnScriptError(ex.Message, (pgAIDetect)scoreFrame.Content); 
+            OnScriptError(ex.Message, (pgAIDetect)scoreFrame.Content);
           }
           finally
           {
             _onProgress = false;
           }
+        } else // Baseline quiz
+        {
+          aiQuiz++; ((pgAIDetect)scoreFrame.Content).lblQuiz.Text = "Comfort";
+          _needQuiz = true;
         }
     }
 

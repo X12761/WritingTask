@@ -9,7 +9,7 @@
       Title="pgAIScore" Loaded="PageLoaded">
 
   <DockPanel>
-    <TextBlock Name="aiMeter" Text="AI monitor" DockPanel.Dock="Top"
+    <TextBlock Name="aiMeter" Text="Monitor" DockPanel.Dock="Top"
                FontSize="20" FontWeight="SemiBold"
                HorizontalAlignment="Center" VerticalAlignment="Center"/>
     <Border Grid.Row="2" Grid.Column="3" Background="White" 
@@ -26,17 +26,17 @@
           <RowDefinition Height="60"/>
           <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="Detected emotion" Grid.Row="0" FontSize="20" 
+        <TextBlock Name="lblDetect" Text="Detected emotion" Grid.Row="0" FontSize="20" 
                HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-        <Image Grid.Row="1" Source="{Binding EmotionImg}"/>
+        <Image Name="imgEmo" Grid.Row="1" Source="{Binding EmotionImg}"/>
 
-        <TextBlock Text="{Binding Emotion}" Grid.Row="2" FontSize="24"  FontWeight="Bold"
+        <TextBlock Name="lblEmo" Text="{Binding Emotion}" Grid.Row="2" FontSize="24"  FontWeight="Bold"
                HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <TextBlock Text="{Binding Confidence}" Grid.Row="3" FontSize="20"  FontWeight="Bold"
+        <TextBlock Name="lblConf" Text="{Binding Confidence}" Grid.Row="3" FontSize="20"  FontWeight="Bold"
                HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-        <ProgressBar Grid.Row="4" FontSize="30" Value="{Binding ConfidenceVal}" HorizontalAlignment="Stretch"/>
+        <ProgressBar Name="pbConf" Grid.Row="4" FontSize="30" Value="{Binding ConfidenceVal}" HorizontalAlignment="Stretch"/>
         
         <!-- Rate -->
         <TextBlock Name="lblQuiz" Grid.Row="5" Text="How comfortable do You feel being monitored by AI ?" 
