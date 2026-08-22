@@ -50,7 +50,8 @@
                  AcceptsTab="True" AcceptsReturn="True" FontFamily="Times New Roman"
                  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
                  IsUndoEnabled="False"
-                PreviewKeyDown="editKeyDown" PreviewKeyUp="editKeyUp" />
+                 CommandManager.PreviewCanExecute="commandExec" 
+                 PreviewKeyDown="editKeyDown" PreviewKeyUp="editKeyUp" />
 
     <StatusBar Grid.Column="0" Grid.Row="3">
       <StatusBarItem Margin="10,0">

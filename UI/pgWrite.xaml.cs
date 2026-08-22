@@ -6,6 +6,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Threading;
 
@@ -28,6 +29,7 @@ namespace WritingTask
     private bool _needQuiz;           // Needs AI prediction scoring
     // Log and not released (Down-state) keys
     private readonly Dictionary<Key, KeyLogEntry> _activeKeys = new Dictionary<Key, KeyLogEntry>();
+
     //--------------------------------------------------------------------------- HELPER
     private static Key GetActualKey(KeyEventArgs e)
     {
@@ -129,7 +131,8 @@ namespace WritingTask
           {
             _onProgress = false;
           }
-        } else // Baseline quiz
+        }
+        else // Baseline quiz
         {
           aiQuiz++; ((pgAIDetect)scoreFrame.Content).lblQuiz.Text = "Comfort";
           _needQuiz = true;
@@ -167,6 +170,12 @@ namespace WritingTask
       entry.ReleasedAt = time;
       entry.ReleasedAtMs = time.TotalMilliseconds;
       entry.DurationMs = (time - entry.PressedAt).TotalMilliseconds;
+    }
+
+    // Hot key block
+    private void commandExec(object sender, CanExecuteRoutedEventArgs e)
+    {
+      if (BlockedCommands.Contains(e.Command)) { e.CanExecute = false; e.Handled = true; }
     }
 
     private void DoneClick(object sender, RoutedEventArgs e)
@@ -228,5 +237,35 @@ namespace WritingTask
     public event PropertyChangedEventHandler PropertyChanged;
     protected void OnPropertyChanged([CallerMemberName] string name = null)
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name)); /* +D+ */
+
+    private static readonly HashSet<ICommand> BlockedCommands = new HashSet<ICommand>
+    {
+    // Copu/Cut/Paste
+    ApplicationCommands.Copy,
+    ApplicationCommands.Cut,
+    ApplicationCommands.Paste,
+    
+    // Undo/Redo
+    ApplicationCommands.Undo,
+    ApplicationCommands.Redo,
+    
+    // Select
+    ApplicationCommands.SelectAll,
+    
+    // Save/Print
+    ApplicationCommands.Save,
+    ApplicationCommands.Print,
+    ApplicationCommands.Open,
+    
+    // Formating
+    EditingCommands.ToggleBold,
+    EditingCommands.ToggleItalic,
+    EditingCommands.ToggleUnderline,
+    EditingCommands.IncreaseFontSize,
+    EditingCommands.DecreaseFontSize,
+    
+    // Other
+    ApplicationCommands.Delete,
+    };
   }
 }
