@@ -36,6 +36,16 @@ namespace WritingTask
         writer.WriteLine($"{TypeSession.code};{TypeSession.age};{TypeSession.gender};{TypeSession.lang};{TypeSession.english};{TypeSession.prof};{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}");
       }
 
+      // Check files
+      for (int stage=0;stage<2;stage++)
+        if (!File.Exists($"data/info{TypeSession.code.Substring(stage * 2, 2)}.rtf") || 
+          !File.Exists($"data/topic{TypeSession.code[stage * 2]}.txt"))
+        {
+          MessageBox.Show($"Check rtf and txt files according {TypeSession.code}", "Warning",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+          return;
+        }
+
       App.StepBar.NextStep();
       App.MainFrame.Navigate(new pgPause());
     }

@@ -49,6 +49,7 @@
     <RichTextBox Name="txtTask" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" FontSize="14"
                  AcceptsTab="True" AcceptsReturn="True" FontFamily="Times New Roman"
                  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                 IsUndoEnabled="False"
                 PreviewKeyDown="editKeyDown" PreviewKeyUp="editKeyUp" />
 
     <StatusBar Grid.Column="0" Grid.Row="3">

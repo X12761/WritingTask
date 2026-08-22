@@ -29,6 +29,14 @@ namespace WritingTask
     // Log and not released (Down-state) keys
     private readonly Dictionary<Key, KeyLogEntry> _activeKeys = new Dictionary<Key, KeyLogEntry>();
     //--------------------------------------------------------------------------- HELPER
+    private static Key GetActualKey(KeyEventArgs e)
+    {
+      // Korean Microsoft IME often sends ImeProcessed
+      if (e.Key == Key.ImeProcessed && e.ImeProcessedKey != Key.None) return e.ImeProcessedKey;
+      if (e.Key == Key.System && e.SystemKey != Key.None) return e.SystemKey;
+      return e.Key;
+    }
+
     private static string GetKeyName(Key key, ModifierKeys modifiers)
     {
       var name = key.ToString();
@@ -133,7 +141,7 @@ namespace WritingTask
       if (!_typewatch.IsRunning) return;
       if (e.IsRepeat) return; // Ignore autorepeat +D+
 
-      var key = e.Key;
+      var key = GetActualKey(e); // e.Key;
       var time = _typewatch.Elapsed;
 
       if (_activeKeys.ContainsKey(key)) return; // Key already down +D+
@@ -151,7 +159,7 @@ namespace WritingTask
     {
       if (!_typewatch.IsRunning) return;
 
-      var key = e.Key;
+      var key = GetActualKey(e); // e.Key;
       if (!_activeKeys.TryGetValue(key, out var entry)) return; // Key not been pressed
       _activeKeys.Remove(key);        // Remove from pressed keys
 
