@@ -23,6 +23,7 @@
             VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" TextWrapping="Wrap"/>
 
     <Frame Name="MainFrame" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+           CommandManager.PreviewCanExecute="MainFrame_PreviewCanExecute"
            NavigationUIVisibility="Hidden"/>
 
     <StatusBar Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">

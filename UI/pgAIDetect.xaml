@@ -29,7 +29,7 @@
         <TextBlock Name="lblDetect" Text="Detected emotion" Grid.Row="0" FontSize="20" 
                HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-        <Image Name="imgEmo" Grid.Row="1" Source="{Binding EmotionImg}"/>
+        <Image Name="imgEmo" Grid.Row="1" Source="{Binding EmotionImg, TargetNullValue={x:Null}}"/>
 
         <TextBlock Name="lblEmo" Text="{Binding Emotion}" Grid.Row="2" FontSize="24"  FontWeight="Bold"
                HorizontalAlignment="Center" VerticalAlignment="Center"/>

@@ -46,6 +46,7 @@ namespace WritingTask
 
     private void ContinueClick(object sender, RoutedEventArgs e)
     {
+      _waitTimer.Stop();
       App.StepBar.NextStep();
       App.MainFrame.Navigate(new pgWrite(stage));
     }
@@ -62,8 +63,8 @@ namespace WritingTask
 
       if (_remain <= TimeSpan.Zero) // 5 minutes elapsed - go next
       {
-        _waitTimer.Stop();
         ContinueClick(this, new RoutedEventArgs());
+        return;
       }
 
       lblRemain.Text = $"Starts in {_remain.ToString(@"hh\:mm\:ss")}"; 

@@ -39,6 +39,14 @@ namespace WritingTask
       for (int i = 1; i <= 7; i++) RatingNumbers.Add(i);
     }
 
+    private void PageLoaded(object sender, RoutedEventArgs e)
+    {
+      Emotion = "Undetected";
+      EmotionImg = "/Resources/emneutral.png";
+      ConfidenceVal = 0;
+      Confidence = $"Confidence {ConfidenceVal}%";
+    }
+
     public void aiRate(Char predisction, double confidence)
     {
       TypeSession.NewQuiz("AIScore");
@@ -85,13 +93,5 @@ namespace WritingTask
     public event PropertyChangedEventHandler PropertyChanged;
     protected void OnPropertyChanged([CallerMemberName] string name = null)
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-
-    private void PageLoaded(object sender, RoutedEventArgs e)
-    {
-      Emotion = "Undetected"; 
-      EmotionImg = "/Resources/emneutral.png"; 
-      ConfidenceVal = 0; 
-      Confidence = $"Confidence {ConfidenceVal}%"; 
-    }
   }
 }

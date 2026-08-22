@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Input;
 
 namespace WritingTask
 {
@@ -20,14 +21,17 @@ namespace WritingTask
       App.MainFrame.Navigate(new pgStart());
     }
 
-    private void Button_Click(object sender, RoutedEventArgs e)
+    // Block navigation hotkeys
+    private void MainFrame_PreviewCanExecute(object sender, System.Windows.Input.CanExecuteRoutedEventArgs e)
     {
-      App.StepBar.NextStep();
-    }
-
-    private void Button_Click_1(object sender, RoutedEventArgs e)
-    {
-      App.StepBar.PrevStep();
+      if (e.Command == NavigationCommands.BrowseBack ||
+            e.Command == NavigationCommands.BrowseForward ||
+            e.Command == NavigationCommands.BrowseHome ||
+            e.Command == NavigationCommands.BrowseStop ||
+            e.Command == NavigationCommands.Refresh)
+      {
+        e.CanExecute = false; e.Handled = true;
+      }
     }
 
     private void iniData(string ininame= "config.ini")

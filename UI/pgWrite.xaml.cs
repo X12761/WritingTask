@@ -175,7 +175,11 @@ namespace WritingTask
     // Hot key block
     private void commandExec(object sender, CanExecuteRoutedEventArgs e)
     {
-      if (BlockedCommands.Contains(e.Command)) { e.CanExecute = false; e.Handled = true; }
+      // Allow space
+      if (e.Command is RoutedUICommand rc && rc != null && rc.Name == "Space") return;
+      // White list
+      if (!AllowedCommands.Contains(e.Command)) { e.CanExecute = false; e.Handled = true; }
+      //if (BlockedCommands.Contains(e.Command)) { e.CanExecute = false; e.Handled = true; } 
     }
 
     private void DoneClick(object sender, RoutedEventArgs e)
@@ -238,6 +242,7 @@ namespace WritingTask
     protected void OnPropertyChanged([CallerMemberName] string name = null)
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name)); /* +D+ */
 
+    // Blocked and allowed commands (find space, tab)
     private static readonly HashSet<ICommand> BlockedCommands = new HashSet<ICommand>
     {
     // Copu/Cut/Paste
@@ -266,6 +271,39 @@ namespace WritingTask
     
     // Other
     ApplicationCommands.Delete,
+    };
+    private static readonly HashSet<ICommand> AllowedCommands = new HashSet<ICommand>
+    { 
+    // Navigate
+    EditingCommands.MoveLeftByCharacter,
+    EditingCommands.MoveRightByCharacter,
+    EditingCommands.MoveUpByLine,
+    EditingCommands.MoveDownByLine,
+    EditingCommands.MoveToLineStart,
+    EditingCommands.MoveToLineEnd,
+    EditingCommands.MoveToDocumentStart,
+    EditingCommands.MoveToDocumentEnd,
+
+    // Delete
+    EditingCommands.Delete,
+    EditingCommands.DeleteNextWord,
+    EditingCommands.DeletePreviousWord,
+    EditingCommands.Backspace,
+    // Font
+    EditingCommands.ToggleBold,
+    EditingCommands.ToggleItalic,
+    EditingCommands.ToggleUnderline,
+    // Text align
+    EditingCommands.AlignCenter,
+    EditingCommands.AlignLeft,
+    EditingCommands.AlignRight,
+
+    // Enter, Tab
+    EditingCommands.EnterParagraphBreak,
+    EditingCommands.EnterLineBreak,
+    EditingCommands.TabForward,
+    EditingCommands.TabBackward,
+    EditingCommands.Backspace
     };
   }
 }
